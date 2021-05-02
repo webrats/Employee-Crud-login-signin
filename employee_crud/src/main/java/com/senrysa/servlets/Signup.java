@@ -50,7 +50,7 @@ public class Signup extends HttpServlet {
 		String psw = req.getParameter("psw");
 		String psw_repeat = req.getParameter("psw-repeat");
 		
-		StringBuffer buffer=new StringBuffer();
+		/*StringBuffer buffer=new StringBuffer();
 		
 		 try {
 				
@@ -82,7 +82,7 @@ public class Signup extends HttpServlet {
         
         
 		try {
-			/*
+			
 			
 			byte[] encryptionBytes = Security.encrypt(psw);
 			 psw=new String(encryptionBytes);
@@ -91,16 +91,28 @@ public class Signup extends HttpServlet {
 			 System.out.println("Dycript "+dpsw);
 			
 			System.out.println(psw);
-			*/
+			
 			
 		} catch (Exception e1) {
 			
 			System.out.println("Encryption Problem "+e1);
 		}
 		
+		*/
+		PrintWriter out = res.getWriter();
 		
 		
+		if(! SignupMiddleware.emailValidate(email, psw)) {
+			out.write("Email or Password Cann't be Null!");
+		}
+		else if(psw.length()<8 ) {
+			out.write("Password Must be Min 8 character");
+		}
+		else if(!SignupMiddleware.passwordMatch(psw, psw_repeat)) {
+			out.write("Password Mismatch");
+		}
 		
+		else {
 		UserDao dao = new UserDao(ConnectionProvider.getConnection());
 		User user = new User(email,psw);
 		
@@ -125,5 +137,6 @@ public class Signup extends HttpServlet {
 		
 		}
 	}
-
 }
+
+
